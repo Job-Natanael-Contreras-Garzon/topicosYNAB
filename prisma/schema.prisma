@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  budgets      Budget[]
+}
+
+model Budget {
+  id       String          @id @default(cuid())
+  name     String
+  currency String          @default("BOB")
+  ownerId  String
+  owner    User            @relation(fields: [ownerId], references: [id])
+  accounts Account[]
+  groups   CategoryGroup[]
+
+  @@index([ownerId])
+}
+
+model Account {
+  id           String        @id @default(cuid())
+  budgetId     String
+  name         String
+  type         String // checking | savings | cash | credit | tracking
+  onBudget     Boolean       @default(true)
+  closed       Boolean       @default(false)
+  budget       Budget        @relation(fields: [budgetId], references: [id])
+  transactions Transaction[]
+
+  @@index([budgetId])
+}
+
+model CategoryGroup {
+  id         String     @id @default(cuid())
+  budgetId   String
+  name       String
+  sort       Int        @default(0)
+  budget     Budget     @relation(fields: [budgetId], references: [id])
+  categories Category[]
+
+  @@index([budgetId])
+}
+
+model Category {
+  id           String              @id @default(cuid())
+  groupId      String
+  name         String
+  sort         Int                 @default(0)
+  hidden       Boolean             @default(false)
+  group        CategoryGroup       @relation(fields: [groupId], references: [id])
+  assignments  MonthlyAssignment[]
+  transactions Transaction[]
+  goal         Goal?
+
+  @@index([groupId])
+}
+
+model MonthlyAssignment {
+  id            String   @id @default(cuid())
+  categoryId    String
+  month         String // Formato: YYYY-MM
+  assignedCents Int      @default(0)
+  category      Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([categoryId, month])
+}
+
+model Transaction {
+  id             String    @id @default(cuid())
+  accountId      String
+  categoryId     String? // null = ingreso general (Ready to Assign) o transferencia
+  date           DateTime
+  amountCents    Int // Negativo = egreso/gasto, Positivo = ingreso
+  payee          String    @default("")
+  memo           String    @default("")
+  approved       Boolean   @default(true)
+  cleared        Boolean   @default(false)
+  transferPairId String? // Identificador que une ambas patas de una transferencia
+  account        Account   @relation(fields: [accountId], references: [id])
+  category       Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([accountId, date])
+  @@index([transferPairId])
+}
+
+model Goal {
+  id          String    @id @default(cuid())
+  categoryId  String    @unique
+  kind        String // monthly | by_date | balance
+  targetCents Int
+  targetDate  DateTime?
+  category    Category  @relation(fields: [categoryId], references: [id])
+}

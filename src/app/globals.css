@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* Tokens de diseño (docs/02-guia-ui-ux.md). Un cambio aquí se aplica a toda la app. */
+@theme inline {
+  --color-primary: #4f5bff;
+  --color-navy: #1b1e5a;
+  --color-lime: #a5e85a;
+  --color-positive: #1f9d55;
+  --color-alert: #e5484d;
+  --color-warning: #f5a623;
+  --color-surface: #f6f7fb;
+  --color-line: #e3e6f0;
+  --color-muted: #6b7185;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-nunito), var(--font-inter), system-ui, sans-serif;
+
+  --radius-field: 8px;
+  --radius-card: 16px;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  font-size: 16px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+dialog::backdrop {
+  background: rgb(27 30 90 / 0.45);
+}
