@@ -59,7 +59,7 @@ Marca cada tarea cuando cumpla su criterio; así este documento sirve como table
 - [x] Transferencias con dos filas enlazadas por `transferPairId`
 - [x] Buscador y filtros por fecha, categoría y "sin aprobar"
 - [x] Aprobación de varias filas a la vez
-
+ 
 ### Sprint 3. Presupuesto
 - [x] `lib/budget.ts`: `available`, `readyToAssign`, `moveMoney`, con Vitest
 - [x] Prueba de consistencia: RTA + suma de disponibles = suma de saldos de presupuesto
@@ -83,9 +83,9 @@ Marca cada tarea cuando cumpla su criterio; así este documento sirve como table
 
 ### Sprint 6. Deuda y presentación
 - [ ] `simulateLoan` con pruebas (préstamo sin extra, con extra, cuota menor a los intereses)
-- [ ] Pantalla de préstamos con dos líneas de saldo y tarjetas de ahorro
-- [ ] Landing, funcionalidades, método y precios con textos propios
-- [ ] Revisión de estados vacíos, mensajes de error y vista en celular
+- [ ] Pantalla de prestamos con dos líneas de saldo y tarjetas de ahorro
+- [ ] Landing, funcionalidades, metodo y precios con textos propios
+- [ ] Revision de estados vacíos, mensajes de error y vista en celular
 - [ ] Guion de demostración ensayado con los datos de la semilla
 
 ### Sprint 7 (opcional). Compartir
