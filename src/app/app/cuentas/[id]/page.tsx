@@ -87,6 +87,7 @@ export default async function CuentaPage({ params }: { params: Promise<{ id: str
           accounts={allAccounts}
           categoryGroups={categoryGroups}
           defaultAccountId={account.id}
+          currency={budget.currency}
         />
       </div>
 

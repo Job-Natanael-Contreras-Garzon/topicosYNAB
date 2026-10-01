@@ -261,3 +261,97 @@ export async function approveTransactionsService(budgetId: string, ids: string[]
   });
   return res.count;
 }
+
+export async function importTransactionsService(input: {
+  budgetId: string;
+  accountId: string;
+  transactions: Array<{
+    date: string; // YYYY-MM-DD
+    amountCents: number;
+    payee: string;
+    memo?: string;
+  }>;
+}): Promise<{ importedCount: number; skippedCount: number }> {
+  const account = await db.account.findFirst({
+    where: { id: input.accountId, budgetId: input.budgetId },
+    select: { id: true },
+  });
+  if (!account) throw new Error("Cuenta no encontrada o no autorizada");
+
+  if (input.transactions.length === 0) {
+    return { importedCount: 0, skippedCount: 0 };
+  }
+
+  // Obtener fechas mínimas y máximas para buscar transacciones existentes y deduplicar
+  const dates = input.transactions.map((t) => t.date).sort();
+  const minDateStr = dates[0];
+  const maxDateStr = dates[dates.length - 1];
+
+  const existingInDateRange = await db.transaction.findMany({
+    where: {
+      accountId: input.accountId,
+      date: {
+        gte: new Date(`${minDateStr}T00:00:00.000Z`),
+        lte: new Date(`${maxDateStr}T23:59:59.999Z`),
+      },
+    },
+    select: {
+      date: true,
+      amountCents: true,
+      payee: true,
+    },
+  });
+
+  const existingFingerprints = new Set<string>();
+  for (const ex of existingInDateRange) {
+    const dStr = ex.date.toISOString().slice(0, 10);
+    const pNorm = ex.payee.trim().toLowerCase();
+    existingFingerprints.add(`${dStr}|${ex.amountCents}|${pNorm}`);
+  }
+
+  const toCreate: Array<{
+    accountId: string;
+    categoryId: null;
+    date: Date;
+    amountCents: number;
+    payee: string;
+    memo: string;
+    approved: boolean;
+    cleared: boolean;
+  }> = [];
+
+  let skippedCount = 0;
+
+  for (const item of input.transactions) {
+    const pNorm = item.payee.trim().toLowerCase();
+    const fp = `${item.date}|${item.amountCents}|${pNorm}`;
+
+    if (existingFingerprints.has(fp)) {
+      skippedCount++;
+    } else {
+      existingFingerprints.add(fp); // Evitar duplicar dentro del mismo lote
+      toCreate.push({
+        accountId: input.accountId,
+        categoryId: null, // Pasan sin categoría para revisión en Home / Presupuesto
+        date: new Date(`${item.date}T12:00:00.000Z`),
+        amountCents: item.amountCents,
+        payee: item.payee.trim() || "Transacción importada",
+        memo: item.memo?.trim() || "",
+        approved: false, // Ingresan desaprobadas (M8)
+        cleared: false,
+      });
+    }
+  }
+
+  if (toCreate.length > 0) {
+    await db.transaction.createMany({
+      data: toCreate,
+    });
+  }
+
+  return {
+    importedCount: toCreate.length,
+    skippedCount,
+  };
+}
+

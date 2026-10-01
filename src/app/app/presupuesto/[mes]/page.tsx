@@ -5,6 +5,7 @@ import { BudgetTable } from "@/components/budget/BudgetTable";
 import { isValidMonth, monthLabel, nextMonth, prevMonth, currentMonth } from "@/lib/months";
 import { requireBudget } from "@/lib/services/auth";
 import { getBudgetMonth } from "@/lib/services/budget-data";
+import { getEvaluatedGoalsForMonth } from "@/lib/services/goals";
 
 export async function generateMetadata({ params }: { params: Promise<{ mes: string }> }) {
   const { mes } = await params;
@@ -16,7 +17,10 @@ export default async function PresupuestoPage({ params }: { params: Promise<{ me
   if (!isValidMonth(mes)) notFound();
 
   const { budget } = await requireBudget();
-  const { groups, budget: b } = await getBudgetMonth(budget.id, mes);
+  const [{ groups, budget: b }, evaluatedGoals] = await Promise.all([
+    getBudgetMonth(budget.id, mes),
+    getEvaluatedGoalsForMonth(budget.id, mes),
+  ]);
   const cur = budget.currency;
   const isCurrent = mes === currentMonth();
 
@@ -64,12 +68,13 @@ export default async function PresupuestoPage({ params }: { params: Promise<{ me
       {/* Banner de Ready to Assign con tres estados */}
       <ReadyToAssignBanner cents={b.readyToAssign} currency={cur} />
 
-      {/* Tabla Interactiva de Grupos y Categorías */}
+      {/* Tabla Interactiva de Grupos, Categorías y Metas */}
       <BudgetTable
         month={mes}
         currency={cur}
         groups={groups}
         computedBudget={b}
+        evaluatedGoals={evaluatedGoals as any}
       />
     </div>
   );

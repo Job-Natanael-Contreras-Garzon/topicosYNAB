@@ -50,6 +50,7 @@ export default async function TodasLasCuentasPage() {
         <TransactionHeaderActions
           accounts={allAccounts}
           categoryGroups={categoryGroups}
+          currency={budget.currency}
         />
       </div>
 

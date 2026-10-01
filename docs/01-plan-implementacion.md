@@ -70,16 +70,16 @@ Marca cada tarea cuando cumpla su criterio; así este documento sirve como table
 - [x] Crear, renombrar, ocultar y reordenar categorías y grupos
 
 ### Sprint 4. Home y metas
-- [ ] Home con tarjetas: nuevas transacciones, Ready to Assign, prioridades y resumen del mes
-- [ ] Formulario de meta con los tres tipos (mensual, para una fecha, saldo)
-- [ ] Barra de progreso e indicador "Falta asignar" en cada fila del presupuesto
-- [ ] Botón "Asignar lo que falta" (`autoAssignFromGoals`)
+- [x] Home con tarjetas: nuevas transacciones, Ready to Assign, prioridades y resumen del mes
+- [x] Formulario de meta con los tres tipos (mensual, para una fecha, saldo)
+- [x] Barra de progreso e indicador "Falta asignar" en cada fila del presupuesto
+- [x] Botón "Asignar lo que falta" (`autoAssignFromGoals`)
 
 ### Sprint 5. Reportes e importación
-- [ ] Consultas agregadas: gasto por categoría, tendencia mensual, patrimonio neto
-- [ ] Tres pestañas de gráficos con Recharts y selector de rango de fechas
-- [ ] Importador CSV: subida, mapeo de columnas, vista previa, formato de fecha y decimal
-- [ ] Detección de duplicados e ingreso con `approved = false`
+- [x] Consultas agregadas: gasto por categoría, tendencia mensual, patrimonio neto
+- [x] Tres pestañas de gráficos con Recharts y selector de rango de fechas
+- [x] Importador CSV: subida, mapeo de columnas, vista previa, formato de fecha y decimal
+- [x] Detección de duplicados e ingreso con `approved = false`
 
 ### Sprint 6. Deuda y presentación
 - [ ] `simulateLoan` con pruebas (préstamo sin extra, con extra, cuota menor a los intereses)

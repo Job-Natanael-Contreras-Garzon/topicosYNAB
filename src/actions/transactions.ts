@@ -10,6 +10,7 @@ import {
   updateTransactionService,
   deleteTransactionService,
   approveTransactionsService,
+  importTransactionsService,
 } from "@/lib/services/transactions";
 
 export interface TransactionFormState {
@@ -214,3 +215,27 @@ export async function approveTransactionsAction(ids: string[]): Promise<{ count:
     return { count: 0, error: err.message || "Error al aprobar transacciones" };
   }
 }
+
+export async function importTransactionsAction(input: {
+  accountId: string;
+  transactions: Array<{
+    date: string;
+    amountCents: number;
+    payee: string;
+    memo?: string;
+  }>;
+}): Promise<{ ok: boolean; importedCount?: number; skippedCount?: number; error?: string }> {
+  const { budget } = await requireBudget();
+  try {
+    const res = await importTransactionsService({
+      budgetId: budget.id,
+      accountId: input.accountId,
+      transactions: input.transactions,
+    });
+    revalidatePath("/app", "layout");
+    return { ok: true, ...res };
+  } catch (err: any) {
+    return { ok: false, error: err.message || "Error al importar transacciones" };
+  }
+}
+

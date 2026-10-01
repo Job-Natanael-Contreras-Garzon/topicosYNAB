@@ -1,12 +1,15 @@
 "use client";
 
-import { useMemo, useState, Fragment } from "react";
+import { useMemo, useState, Fragment, useTransition } from "react";
 import Link from "next/link";
 import { setAssignmentAction } from "@/actions/budget";
+import { autoAssignFromGoalsAction } from "@/actions/goals";
 import { InlineNumberInput } from "./InlineNumberInput";
 import { MoneyPill } from "./MoneyPill";
 import { MoveMoneyDialog } from "./MoveMoneyDialog";
 import { ManageCategoriesDialog } from "./ManageCategoriesDialog";
+import { GoalProgress } from "@/components/goals/GoalProgress";
+import { GoalModal } from "@/components/goals/GoalModal";
 import { formatCents } from "@/lib/money";
 
 export interface CategoryItem {
@@ -19,6 +22,23 @@ export interface CategoryGroupItem {
   id: string;
   name: string;
   categories: CategoryItem[];
+}
+
+export interface EvaluatedGoalItem {
+  id: string;
+  categoryId: string;
+  kind: "monthly" | "by_date" | "balance";
+  targetCents: number;
+  targetDate?: Date | string | null;
+  evaluation: {
+    kind: "monthly" | "by_date" | "balance";
+    targetCents: number;
+    neededThisMonth: number;
+    underfundedCents: number;
+    progressPercent: number;
+    targetDateStr?: string | null;
+    isFunded: boolean;
+  };
 }
 
 export interface BudgetComputedData {
@@ -44,6 +64,7 @@ interface Props {
   currency?: string;
   groups: CategoryGroupItem[];
   computedBudget: BudgetComputedData;
+  evaluatedGoals?: EvaluatedGoalItem[];
 }
 
 export function BudgetTable({
@@ -51,6 +72,7 @@ export function BudgetTable({
   currency = "BOB",
   groups,
   computedBudget,
+  evaluatedGoals = [],
 }: Props) {
   // Estado para colapsar/expandir grupos
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
@@ -66,6 +88,19 @@ export function BudgetTable({
   const [isManageOpen, setIsManageOpen] = useState(false);
   const [initialGroupIdToAdd, setInitialGroupIdToAdd] = useState<string | null>(null);
 
+  // Diálogo Metas
+  const [goalModalCategory, setGoalModalCategory] = useState<{
+    id: string;
+    name: string;
+    existingGoal?: {
+      kind: "monthly" | "by_date" | "balance";
+      targetCents: number;
+      targetDate?: Date | string | null;
+    } | null;
+  } | null>(null);
+
+  const [isAutoAssigning, startAutoAssign] = useTransition();
+
   const toggleGroup = (groupId: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -75,6 +110,24 @@ export function BudgetTable({
 
   const handleSaveAssigned = async (categoryId: string, cents: number) => {
     await setAssignmentAction(categoryId, month, cents);
+  };
+
+  const goalsMap = useMemo(() => {
+    const map = new Map<string, EvaluatedGoalItem>();
+    for (const g of evaluatedGoals) {
+      map.set(g.categoryId, g);
+    }
+    return map;
+  }, [evaluatedGoals]);
+
+  const totalUnderfunded = useMemo(() => {
+    return evaluatedGoals.reduce((sum, g) => sum + g.evaluation.underfundedCents, 0);
+  }, [evaluatedGoals]);
+
+  const handleAutoAssign = () => {
+    startAutoAssign(async () => {
+      await autoAssignFromGoalsAction(month);
+    });
   };
 
   // Lista plana de categorías activas para el diálogo Mover Dinero
@@ -133,18 +186,42 @@ export function BudgetTable({
               {formatCents(computedBudget.totals.available, currency)}
             </p>
           </div>
+          {totalUnderfunded > 0 && (
+            <div className="border-l border-line pl-6">
+              <p className="text-xs font-bold uppercase text-alert">Falta en Metas</p>
+              <p className="text-xl font-extrabold tabular-nums text-alert mt-0.5">
+                {formatCents(totalUnderfunded, currency)}
+              </p>
+            </div>
+          )}
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setInitialGroupIdToAdd(null);
-            setIsManageOpen(true);
-          }}
-          className="inline-flex min-h-9 items-center justify-center rounded-field border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-deep-blue hover:bg-powder-pink/30 hover:border-modern-pink transition cursor-pointer"
-        >
-          ⚙ Administrar categorías
-        </button>
+        <div className="flex items-center gap-2">
+          {totalUnderfunded > 0 && (
+            <button
+              type="button"
+              onClick={handleAutoAssign}
+              disabled={isAutoAssigning}
+              className="inline-flex min-h-9 items-center justify-center rounded-field bg-modern-pink text-deep-blue font-bold px-3 py-1.5 text-xs hover:brightness-95 transition shadow-sm cursor-pointer disabled:opacity-50"
+              title="Asignar automáticamente el monto necesario a todas las categorías con meta descubierta"
+            >
+              {isAutoAssigning
+                ? "Asignando…"
+                : `⚡ Asignar lo que falta (${formatCents(totalUnderfunded, currency)})`}
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              setInitialGroupIdToAdd(null);
+              setIsManageOpen(true);
+            }}
+            className="inline-flex min-h-9 items-center justify-center rounded-field border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-deep-blue hover:bg-powder-pink/30 hover:border-modern-pink transition cursor-pointer"
+          >
+            ⚙ Categorías
+          </button>
+        </div>
       </div>
 
       {/* Tabla del Presupuesto */}
@@ -213,21 +290,58 @@ export function BudgetTable({
                         activity: 0,
                         available: 0,
                       };
+                      const goal = goalsMap.get(c.id);
 
                       return (
                         <tr
                           key={c.id}
                           className="border-t border-line/60 hover:bg-surface/30 transition group"
                         >
-                          {/* Nombre de la Categoría */}
+                          {/* Nombre de la Categoría y Progreso de Meta */}
                           <td className="px-4 py-2 pl-10 text-sm font-medium">
-                            <div className="flex items-center justify-between">
-                              <span>{c.name}</span>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="truncate">{c.name}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setGoalModalCategory({
+                                    id: c.id,
+                                    name: c.name,
+                                    existingGoal: goal
+                                      ? {
+                                          kind: goal.kind,
+                                          targetCents: goal.targetCents,
+                                          targetDate: goal.targetDate,
+                                        }
+                                      : null,
+                                  })
+                                }
+                                className={`text-xs px-1.5 py-0.5 rounded transition cursor-pointer ${
+                                  goal
+                                    ? "bg-powder-pink/30 text-deep-blue hover:bg-modern-pink"
+                                    : "opacity-0 group-hover:opacity-60 hover:opacity-100 text-muted hover:text-deep-blue"
+                                }`}
+                                title={goal ? "Modificar meta de ahorro" : "Definir meta (target)"}
+                              >
+                                {goal ? "🎯 Meta" : "+ Meta"}
+                              </button>
                             </div>
+
+                            {/* Barra de Progreso de Meta si existe */}
+                            {goal && (
+                              <div className="mt-1 max-w-xs">
+                                <GoalProgress
+                                  underfundedCents={goal.evaluation.underfundedCents}
+                                  progressPercent={goal.evaluation.progressPercent}
+                                  currency={currency}
+                                  isFunded={goal.evaluation.isFunded}
+                                />
+                              </div>
+                            )}
                           </td>
 
                           {/* Celda Asignado: Editable en línea */}
-                          <td className="px-4 py-1.5 text-right">
+                          <td className="px-4 py-1.5 text-right align-top">
                             <div className="flex justify-end">
                               <InlineNumberInput
                                 valueCents={state.assigned}
@@ -239,7 +353,7 @@ export function BudgetTable({
                           </td>
 
                           {/* Actividad */}
-                          <td className="px-4 py-2 text-right tabular-nums text-sm font-medium">
+                          <td className="px-4 py-2 text-right tabular-nums text-sm font-medium align-top">
                             {state.activity !== 0 ? (
                               <Link
                                 href={`/app/cuentas/todas`}
@@ -254,7 +368,7 @@ export function BudgetTable({
                           </td>
 
                           {/* Disponible con MoneyPill interactivo */}
-                          <td className="px-4 py-2 text-right">
+                          <td className="px-4 py-2 text-right align-top">
                             <button
                               type="button"
                               onClick={() =>
@@ -301,6 +415,17 @@ export function BudgetTable({
         onClose={() => setIsManageOpen(false)}
         initialGroupIdToAdd={initialGroupIdToAdd}
       />
+
+      {/* Diálogo de Metas */}
+      {goalModalCategory && (
+        <GoalModal
+          categoryId={goalModalCategory.id}
+          categoryName={goalModalCategory.name}
+          existingGoal={goalModalCategory.existingGoal}
+          isOpen={Boolean(goalModalCategory)}
+          onClose={() => setGoalModalCategory(null)}
+        />
+      )}
     </div>
   );
 }
