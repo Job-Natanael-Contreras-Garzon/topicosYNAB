@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, Fragment } from "react";
 import Link from "next/link";
 import { setAssignmentAction } from "@/actions/budget";
 import { InlineNumberInput } from "./InlineNumberInput";
@@ -165,7 +165,7 @@ export function BudgetTable({
               const totals = groupTotals[group.id] || { assigned: 0, activity: 0, available: 0 };
 
               return (
-                <div key={group.id} className="contents">
+                <Fragment key={group.id}>
                   {/* Fila del Grupo */}
                   <tr className="border-t border-line bg-surface/60 hover:bg-surface transition">
                     <th colSpan={1} className="px-4 py-2.5 text-left font-bold text-deep-blue">
@@ -273,7 +273,7 @@ export function BudgetTable({
                         </tr>
                       );
                     })}
-                </div>
+                </Fragment>
               );
             })}
           </tbody>

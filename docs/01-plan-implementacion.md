@@ -61,13 +61,13 @@ Marca cada tarea cuando cumpla su criterio; así este documento sirve como table
 - [x] Aprobación de varias filas a la vez
 
 ### Sprint 3. Presupuesto
-- [ ] `lib/budget.ts`: `available`, `readyToAssign`, `moveMoney`, con Vitest
-- [ ] Prueba de consistencia: RTA + suma de disponibles = suma de saldos de presupuesto
-- [ ] Pantalla `/app/presupuesto/[mes]` con selector de mes y grupos plegables
-- [ ] Celda "Asignado" editable en línea con guardado al salir del campo
-- [ ] Banner de Ready to Assign con tres estados de color
-- [ ] Diálogo "Mover dinero" entre categorías
-- [ ] Crear, renombrar, ocultar y reordenar categorías y grupos
+- [x] `lib/budget.ts`: `available`, `readyToAssign`, `moveMoney`, con Vitest
+- [x] Prueba de consistencia: RTA + suma de disponibles = suma de saldos de presupuesto
+- [x] Pantalla `/app/presupuesto/[mes]` con selector de mes y grupos plegables
+- [x] Celda "Asignado" editable en línea con guardado al salir del campo
+- [x] Banner de Ready to Assign con tres estados de color
+- [x] Diálogo "Mover dinero" entre categorías
+- [x] Crear, renombrar, ocultar y reordenar categorías y grupos
 
 ### Sprint 4. Home y metas
 - [ ] Home con tarjetas: nuevas transacciones, Ready to Assign, prioridades y resumen del mes
