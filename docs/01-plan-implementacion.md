@@ -37,28 +37,28 @@ Este documento complementa la documentación por módulos (M1 a M11). Cada sprin
 Marca cada tarea cuando cumpla su criterio; así este documento sirve como tablero vivo de avance.
 
 ### Sprint 0. Base
-- [ ] Crear el proyecto con `create-next-app` (TypeScript, Tailwind, App Router) y subirlo a Git
-- [ ] Crear la base PostgreSQL, definir `DATABASE_URL` en `.env` (fuera de Git), instalar Prisma y definir el esquema del documento de módulos
-- [ ] Inicializar shadcn/ui y agregar button, input, dialog, table, tabs, select, toast
-- [ ] Crear `lib/db.ts`, `lib/money.ts` (centavos a texto, con el separador decimal local) y `.env` con `DATABASE_URL`
-- [ ] Escribir `prisma/seed.ts` con usuario de prueba, cuentas, categorías y transacciones de tres meses
-- [ ] Layout de `/app` con barra lateral (Inicio, Presupuesto, Reportes, Préstamos, Ajustes)
+- [x] Crear el proyecto con `create-next-app` (TypeScript, Tailwind, App Router) y subirlo a Git
+- [x] Crear la base PostgreSQL, definir `DATABASE_URL` en `.env` (fuera de Git), instalar Prisma y definir el esquema del documento de módulos
+- [x] Inicializar shadcn/ui y agregar button, input, dialog, table, tabs, select, toast
+- [x] Crear `lib/db.ts`, `lib/money.ts` (centavos a texto, con el separador decimal local) y `.env` con `DATABASE_URL`
+- [x] Escribir `prisma/seed.ts` con usuario de prueba, cuentas, categorías y transacciones de tres meses
+- [x] Layout de `/app` con barra lateral (Inicio, Presupuesto, Reportes, Préstamos, Ajustes)
 
 ### Sprint 1. Acceso y cuentas
-- [ ] `registerUser` con Zod y bcryptjs; `loginUser` con cookie de sesión
-- [ ] `middleware.ts` que protege `/app` y redirige a `/login`
-- [ ] Al registrarse, crear el presupuesto y las categorías semilla
-- [ ] Barra lateral de cuentas con saldo y agrupación Presupuesto / Seguimiento
-- [ ] Diálogo "Agregar cuenta" con saldo inicial (crea la transacción de ingreso)
-- [ ] Cerrar cuenta y ocultarla de la lista
+- [x] `registerUser` con Zod y bcryptjs; `loginUser` con cookie de sesión
+- [x] `middleware.ts` que protege `/app` y redirige a `/login`
+- [x] Al registrarse, crear el presupuesto y las categorías semilla
+- [x] Barra lateral de cuentas con saldo y agrupación Presupuesto / Seguimiento
+- [x] Diálogo "Agregar cuenta" con saldo inicial (crea la transacción de ingreso)
+- [x] Cerrar cuenta y ocultarla de la lista
 
 ### Sprint 2. Transacciones
-- [ ] Tabla de transacciones por cuenta y vista "todas las cuentas"
-- [ ] Formulario de gasto e ingreso con validación (categoría obligatoria en gastos)
-- [ ] Editar y borrar con confirmación
-- [ ] Transferencias con dos filas enlazadas por `transferPairId`
-- [ ] Buscador y filtros por fecha, categoría y "sin aprobar"
-- [ ] Aprobación de varias filas a la vez
+- [x] Tabla de transacciones por cuenta y vista "todas las cuentas"
+- [x] Formulario de gasto e ingreso con validación (categoría obligatoria en gastos)
+- [x] Editar y borrar con confirmación
+- [x] Transferencias con dos filas enlazadas por `transferPairId`
+- [x] Buscador y filtros por fecha, categoría y "sin aprobar"
+- [x] Aprobación de varias filas a la vez
 
 ### Sprint 3. Presupuesto
 - [ ] `lib/budget.ts`: `available`, `readyToAssign`, `moveMoney`, con Vitest
