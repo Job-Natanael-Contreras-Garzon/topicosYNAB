@@ -10,6 +10,7 @@ import {
 import { SpendingByCategoryChart } from "@/components/charts/SpendingByCategoryChart";
 import { SpendingTrendChart } from "@/components/charts/SpendingTrendChart";
 import { NetWorthChart } from "@/components/charts/NetWorthChart";
+import { ReportCategoryFilter } from "@/components/charts/ReportCategoryFilter";
 
 export const metadata = { title: "Reportes — Sobres" };
 
@@ -153,33 +154,12 @@ export default async function ReportesPage({ searchParams }: PageProps) {
                 </p>
               </div>
 
-              {/* Selector de Categoría individual o todas */}
-              <form method="GET" action="/app/reportes" className="flex items-center gap-2">
-                <input type="hidden" name="tab" value="trend" />
-                <input type="hidden" name="range" value={range} />
-                <label htmlFor="category-select" className="text-xs font-semibold text-muted">
-                  Filtrar categoría:
-                </label>
-                <select
-                  id="category-select"
-                  name="category"
-                  defaultValue={category}
-                  className="rounded-field border border-line bg-surface/50 px-3 py-1.5 text-xs font-medium text-deep-blue focus:bg-white"
-                  onChange={(e) => e.target.form?.submit()}
-                >
-                  <option value="all">Todas las categorías</option>
-                  <option value="uncategorized">Sin categoría</option>
-                  {categoryGroups.map((group) => (
-                    <optgroup key={group.id} label={group.name}>
-                      {group.categories.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-              </form>
+              {/* Selector de Categoría individual o todas (Client Component) */}
+              <ReportCategoryFilter
+                range={range}
+                currentCategory={category}
+                categoryGroups={categoryGroups}
+              />
             </div>
 
             <SpendingTrendChart
