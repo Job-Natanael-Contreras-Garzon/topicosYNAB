@@ -1,7 +1,5 @@
-# Clon de YNAB en Next.js — Documentación del Proyecto
+# YNAB en Next.js — Documentación del Proyecto
 
-> **Fecha:** 29 de septiembre de 2026  
-> **Autor:** @eude  
 > **Stack principal:** Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui, Prisma ORM, PostgreSQL.
 
 Bienvenido a la documentación técnica, de diseño y de planificación para el desarrollo del **Clon de YNAB (You Need A Budget)**. El objetivo es construir una aplicación web de presupuesto personal de base cero que corra en entorno local conectada a una base de datos PostgreSQL.
