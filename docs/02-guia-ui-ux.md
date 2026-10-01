@@ -25,23 +25,28 @@
 
 ---
 
-## 🎨 Guía de UI: Tokens de Diseño
+## 🎨 Guía de UI: Tokens de Diseño Vanguardista
 
-Define estos valores una sola vez como variables de Tailwind CSS (`tailwind.config.ts` o `@theme`) para que un cambio de aspecto se aplique globalmente desde un solo archivo.
+> [!TIP]
+> **Skill de Sistema de Diseño:** Consulta la skill del proyecto en [`.agents/skills/ui-theme-palette/SKILL.md`](file:///c:/Users/contr/Documents/Repositorios%20de%20Git/topicosYNAB/.agents/skills/ui-theme-palette/SKILL.md) para consultar las directrices completas, tokens y ejemplos de implementación.
 
-| Elemento | Valor sugerido | Uso e intención |
-| :--- | :--- | :--- |
-| **Primario (azul-violeta)** | `#4F5BFF` | Fondo del hero, enlaces interactivos, elementos activos |
-| **Marino** | `#1B1E5A` | Barra superior de navegación, textos de encabezados principales |
-| **Acento (verde lima)** | `#A5E85A` | Botón principal de llamada a la acción (CTA) y etiquetas de monto positivo |
-| **Positivo** | `#1F9D55` | Disponible mayor que cero, meta cumplida satisfactoriamente |
-| **Alerta** | `#E5484D` | Disponible negativo, mensajes de error crítico |
-| **Advertencia** | `#F5A623` | Meta a medio financiar o que requiere atención |
-| **Neutros** | `#F6F7FB`, `#E3E6F0`, `#6B7185`, `#1B1E5A` | Fondo general, bordes divisorios, texto secundario, texto de lectura principal |
-| **Tipografía** | Sans redondeada (*Nunito* o *Poppins*) para títulos; *Inter* para tablas y datos | Se cargan de forma optimizada mediante `next/font` |
-| **Escala de texto** | 14 px tablas, 16 px cuerpo, 20 y 32 px títulos, 56 px titular del hero | Jerarquía tipográfica uniforme |
-| **Espaciado** | Múltiplos de 4 px (8, 12, 16, 24, 32 px) | Márgenes, paddings y separadores consistentes |
-| **Radio de esquinas** | 8 px en inputs y botones, 16 px en tarjetas, 999 px en chips de monto | Proporciona un aspecto suave y amigable |
+Define estos valores de forma centralizada en `src/app/globals.css` mediante `@theme inline` de Tailwind CSS v4 para que cualquier ajuste cromático o de estilo se propague automáticamente a toda la interfaz.
+
+| Color / Token | Código HEX | Rol en la Composición | Descripción Visual e Intención |
+| :--- | :--- | :--- | :--- |
+| **Deep Blue** | `#1A2B4C` | **Base / Dominante** | Azul marino profundo. Aporta la estructura seria, sobria y vanguardista. Se utiliza en fondos de navegación, barra lateral, encabezados hero y textos oscuros. |
+| **Money Green** | `#2E5A44` | **Acento Corporativo** | Verde bosque/oliva oscuro. Evoca éxito financiero, elegancia, estabilidad y riqueza. Representa dinero disponible, balances positivos y confirmaciones. |
+| **Modern Pink** | `#FF8DA1` | **Contraste / Foco** | Rosa vibrante y fresco. Rompe la sobriedad con energía moderna. Es el punto focal para llamadas a la acción primarias (CTA), botones activos y focos de atención. |
+| **Soft Powder Pink** | `#F9D5E5` | **Transición / Fondo** | Rosa pastel suave. Equilibra la fuerza de los tonos oscuros. Se emplea en fondos sutiles, badges secundarios, tarjetas de transición y efectos hover suaves. |
+| **Off-White / Gold** | `#F7F5F0` | **Iluminación** | Blanco roto cálido con destellos dorados sutiles. Ilumina la composición y crea un contraste limpio y acogedor con los fondos oscuros. Es el fondo base de la aplicación. |
+| **Alerta / Déficit** | `#E5484D` | **Error / Sobregasto** | Rojo semántico para montos negativos, sobregiros o errores de validación. |
+| **Advertencia** | `#E59830` | **Atención** | Metas a medio financiar o alertas moderadas. |
+| **Líneas y Bordes** | `#E3DED5` | **Delimitación** | Bordes sutiles que armonizan de forma natural con el fondo Off-White. |
+| **Texto Secundario**| `#5E6878` | **Neutral / Muted** | Texto de apoyo legible sobre superficies Off-White. |
+| **Tipografía** | Nunito / Poppins (Títulos) e Inter (Datos/Tablas) | Se cargan optimizadas con `next/font`. |
+| **Escala de texto** | 14 px tablas, 16 px cuerpo, 20 y 32 px títulos, 56 px titular del hero | Jerarquía tipográfica uniforme. |
+| **Espaciado** | Múltiplos de 4 px (8, 12, 16, 24, 32 px) | Márgenes, paddings y separadores consistentes. |
+| **Radio de esquinas** | 8 px en inputs y botones, 16 px en tarjetas, 999 px en pastillas de monto | Aspecto moderno, refinado y amable. |
 
 ---
 
@@ -50,22 +55,22 @@ Define estos valores una sola vez como variables de Tailwind CSS (`tailwind.conf
 Construye estos componentes una sola vez dentro de `src/components/`:
 
 1. **`MoneyPill`**: Monto formateado dentro de una pastilla redondeada con color condicional según su estado financiero:
-   - Verde: disponible positivo.
-   - Gris: exactamente cero.
-   - Rojo: sobregasto o déficit.
+   - **Money Green (`#2E5A44`):** disponible positivo ($> 0$).
+   - **Gris neutro (`#5E6878` / `#E3DED5`):** exactamente cero ($= 0$).
+   - **Rojo alerta (`#E5484D`):** sobregasto o déficit ($< 0$).
    *Uso:* Columna "Disponible", prioridades del Home y tarjetas de reportes.
 2. **`ReadyToAssignBanner`**: Barra fija situada sobre la tabla del presupuesto mensual con el monto total y un mensaje conciso de estado:
-   - *"Todo asignado"* (gris/neutro si es 0).
-   - *"Te faltan 120 por asignar"* (verde si es positivo).
-   - *"Asignaste 50 de más"* (rojo si es negativo).
-3. **`InlineNumberInput`**: Campo editable que se comporta como texto estático hasta que se hace clic o foco sobre él. Acepta números, guarda automáticamente al presionar `Enter` o perder el foco (`blur`), y descarta cambios con `Esc`.
+   - *"Todo asignado"* (fondo neutro `bg-line/60` con texto `text-deep-blue` si es 0).
+   - *"Te faltan X por asignar"* (fondo `bg-money-green text-off-white` si es positivo).
+   - *"Asignaste X de más"* (fondo `bg-alert text-white` si es negativo).
+3. **`InlineNumberInput`**: Campo editable que se comporta como texto estático hasta que se hace clic o foco sobre él. Acepta números, guarda automáticamente al presionar `Enter` o perder el foco (`blur`), y descarta cambios con `Esc`. Foco resaltado con borde `border-modern-pink`.
 4. **`GoalProgress`**: Barra delgada de progreso visual con el porcentaje de cobertura y la etiqueta descriptiva *"Falta asignar"*.
 5. **`EmptyState`**: Ilustración vectorial sencilla, frase explicativa de causa y botón de acción principal para guiar el siguiente paso. Unificada para toda la app.
 6. **`ConfirmDialog`**: Diálogo modal para acciones destructivas (borrados). El botón de confirmación destructivo va a la derecha en rojo; el botón de cancelar tiene el foco por defecto.
 
 > [!TIP]
 > **Diseño del Hero en la Landing:**  
-> Utiliza un degradado que vaya del primario (`#4F5BFF`) a un tono azul más oscuro, aplica sombra difusa suave en la maqueta del teléfono móvil y diseña billetes/monedas en SVG propios con rotación leve. Evita copiar directamente las ilustraciones protegidas de YNAB.
+> Utiliza un degradado que vaya de `Deep Blue` (`#1A2B4C`) a un tono más oscuro (`#0D1627`), con iluminación sutil en `Soft Powder Pink` (`#F9D5E5`), tipografía en `Off-White` (`#F7F5F0`) y botón CTA principal de alto contraste en `Modern Pink` (`#FF8DA1`) con texto en `Deep Blue` (`#1A2B4C`).
 
 ---
 
@@ -99,7 +104,10 @@ Construye estos componentes una sola vez dentro de `src/components/`:
 ## ♿ Accesibilidad, Estados y Pruebas de Usabilidad
 
 ### Criterios de Accesibilidad Mínima
-1. **Contraste de color:** Mantener una relación de contraste mínima de **4,5:1** para texto regular (ojo: el verde lima `#A5E85A` sobre blanco no cumple; sobre fondo marino `#1B1E5A` sí funciona adecuadamente).
+1. **Contraste de color (WCAG AA y AAA):** Mantener una relación de contraste mínima de **4,5:1** para texto regular (y 7:1 para AAA).
+   - `Modern Pink` (`#FF8DA1`) debe combinarse con texto `Deep Blue` (`#1A2B4C`) logrando un contraste sobresaliente de **8.8:1**. Nunca usar texto blanco sobre Modern Pink.
+   - Textos sobre `Deep Blue` deben usar `Off-White` (`#F7F5F0`) logrando **12.5:1**.
+   - `Money Green` (`#2E5A44`) sobre fondo `Off-White` alcanza un contraste de **5.2:1** (aprobado WCAG AA).
 2. **No depender exclusivamente del color:** Todo estado crítico en rojo debe ir acompañado de texto explícito o un icono descriptivo (*"Falta $30.00"*).
 3. **Soporte de teclado y lectores de pantalla:** Cada control debe poseer un `label` visible o `aria-label`; el anillo de foco (`focus-visible`) debe ser nítido al usar `Tab`. Los modales deben atrapar el foco y cerrarse con `Esc` (shadcn/ui lo cubre de fábrica).
 4. **Áreas táctiles:** Objetivos de toque de al menos **40 × 40 px** y tipografía que respete el zoom del navegador sin truncarse.

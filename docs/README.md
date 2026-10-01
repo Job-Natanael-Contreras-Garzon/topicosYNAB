@@ -13,7 +13,7 @@ La documentación se encuentra dividida en módulos temáticos dentro de esta ca
 | Archivo | Descripción |
 | :--- | :--- |
 | **[01. Plan de Implementación y Sprints](01-plan-implementacion.md)** | Plan de trabajo vertical por sprints (0 a 7), checklists de tareas, reglas de trabajo, Definición de Terminado (DoD) y guión de demostración. |
-| **[02. Guía de Diseño UI/UX](02-guia-ui-ux.md)** | Conceptos clave de UX, tokens de diseño (colores, tipografía, espaciado), componentes reutilizables, consejos pantalla por pantalla, accesibilidad y estados de interfaz. |
+| **[02. Guía de Diseño UI/UX](02-guia-ui-ux.md)** | Sistema de diseño vanguardista y paleta propia (Deep Blue, Money Green, Modern Pink, Soft Powder Pink, Off-White), tokens de Tailwind, skill de diseño, componentes reutilizables, accesibilidad y estados de interfaz. |
 | **[03. Alcance, Método YNAB y Casos de Uso](03-alcance-metodo-y-casos-de-uso.md)** | Filosofía base cero, las 5 preguntas del método, matriz de funcionalidades y los 10 casos de uso principales (CU1 a CU10) para pruebas de aceptación. |
 | **[04. Especificación Detallada de Módulos (M1 a M11)](04-especificacion-modulos.md)** | Especificación funcional y técnica de cada módulo: M1 (Autenticación) a M11 (Presupuesto Compartido), pantallas, reglas y Server Actions. |
 | **[05. Arquitectura y Modelo de Datos](05-arquitectura-y-modelo-datos.md)** | Stack tecnológico, decisiones arquitectónicas, modelo relacional de datos, esquema Prisma completo (`schema.prisma`) y reglas de transferencias. |

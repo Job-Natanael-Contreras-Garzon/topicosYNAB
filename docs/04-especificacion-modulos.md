@@ -174,8 +174,8 @@
 - **Propósito:** Recrear con identidad visual propia la página de presentación del producto para dar contexto al proyecto y a su defensa académica.
 - **Pantallas públicas:** `/` (landing page principal), `/funcionalidades`, `/metodo` y `/precios` (indicando modelo local libre).
 - **Componentes y composición visual:**
-  - Barra de navegación oscura con logo, enlaces a secciones informativas, botón *"Iniciar sesión"* y CTA verde lima *"Empieza gratis"*.
-  - Sección Hero con gradiente de fondo azul-violeta (`#4F5BFF`), titular principal llamativo (*"¿Te preocupa el dinero?"*), subtítulo persuasivo, botón de acción y leyenda *"Sin tarjeta de crédito"*.
+  - Barra de navegación en Deep Blue (`#1A2B4C`) con logo `Sobres.` (punto en Modern Pink `#FF8DA1`), enlaces a secciones informativas, botón *"Iniciar sesión"* y CTA principal en Modern Pink (`#FF8DA1`) *"Empieza gratis"*.
+  - Sección Hero con gradiente vanguardista de fondo en Deep Blue (`#1A2B4C`) hacia azul profundo (`#0D1627`), iluminación en Soft Powder Pink (`#F9D5E5`), tipografía en Off-White (`#F7F5F0`), titular principal llamativo (*"¿Te preocupa el dinero?"*), subtítulo persuasivo, botón de acción en Modern Pink con texto en Deep Blue y leyenda *"Sin tarjeta de crédito"*.
   - A la derecha del Hero, maqueta inclinada de dispositivo móvil proyectando la vista Home (M6) rodeada de elementos gráficos vectoriales SVG propios.
   - Bloque explicativo del método YNAB en cinco preguntas interactivas.
   - Cuadrícula de tarjetas con las funcionalidades clave y llamado final a la acción.

@@ -1,16 +1,32 @@
 @import "tailwindcss";
 
-/* Tokens de diseño (docs/02-guia-ui-ux.md). Un cambio aquí se aplica a toda la app. */
+/* Tokens de diseño del sistema vanguardista.
+   Definición centralizada de variables para control total en la edición. */
 @theme inline {
-  --color-primary: #4f5bff;
-  --color-navy: #1b1e5a;
-  --color-lime: #a5e85a;
-  --color-positive: #1f9d55;
+  /* Paleta Vanguardista Nominal */
+  --color-deep-blue: #1a2b4c;
+  --color-money-green: #2e5a44;
+  --color-modern-pink: #ff8da1;
+  --color-powder-pink: #f9d5e5;
+  --color-off-white: #f7f5f0;
+
+  /* Mapeo de roles semánticos del sistema */
+  --color-base: var(--color-deep-blue);
+  --color-navy: var(--color-deep-blue);
+  --color-corporate: var(--color-money-green);
+  --color-positive: var(--color-money-green);
+  --color-primary: var(--color-modern-pink);
+  --color-focus: var(--color-modern-pink);
+  --color-lime: var(--color-modern-pink);
+  --color-accent: var(--color-modern-pink);
+  --color-transition: var(--color-powder-pink);
+  --color-surface: var(--color-off-white);
+
+  /* Neutros y estados */
+  --color-line: #e3ded5;
+  --color-muted: #5e6878;
   --color-alert: #e5484d;
-  --color-warning: #f5a623;
-  --color-surface: #f6f7fb;
-  --color-line: #e3e6f0;
-  --color-muted: #6b7185;
+  --color-warning: #e59830;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-display: var(--font-nunito), var(--font-inter), system-ui, sans-serif;
@@ -21,7 +37,7 @@
 
 body {
   background: var(--color-surface);
-  color: var(--color-navy);
+  color: var(--color-deep-blue);
   font-family: var(--font-sans);
   font-size: 16px;
 }
@@ -31,10 +47,10 @@ h1, h2, h3 {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-modern-pink);
   outline-offset: 2px;
 }
 
 dialog::backdrop {
-  background: rgb(27 30 90 / 0.45);
+  background: rgb(26 43 76 / 0.55);
 }
