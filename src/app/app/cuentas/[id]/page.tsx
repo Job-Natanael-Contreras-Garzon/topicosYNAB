@@ -6,9 +6,13 @@ import { listOpenAccounts, ACCOUNT_TYPE_LABELS, type AccountType } from "@/lib/s
 import { listTransactions } from "@/lib/services/transactions";
 import { TransactionTable } from "@/components/transactions/TransactionTable";
 import { TransactionHeaderActions } from "@/components/transactions/TransactionHeaderActions";
+import TodasLasCuentasPage from "../todas/page";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  if (id === "todas") {
+    return { title: "Todas las cuentas — Sobres" };
+  }
   const { budget } = await requireBudget();
   const account = await db.account.findFirst({
     where: { id, budgetId: budget.id },
@@ -19,6 +23,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function CuentaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  if (id === "todas") {
+    return <TodasLasCuentasPage />;
+  }
   const { budget } = await requireBudget();
 
   // Filtrar estrictamente por budgetId para evitar fugas entre usuarios

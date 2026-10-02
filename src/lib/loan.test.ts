@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { simulateLoan } from "./loan";
+import { simulateLoan, simulateLoanSchedule } from "./loan";
 
 describe("simulateLoan", () => {
   it("sin pago extra: préstamo sin interés se paga en balance/cuota meses", () => {
@@ -29,5 +29,31 @@ describe("simulateLoan", () => {
   it("la última cuota no paga de más", () => {
     const r = simulateLoan(15000, 0, 10000);
     expect(r.months).toBe(2);
+  });
+
+  describe("simulateLoanSchedule", () => {
+    it("genera cronograma comparativo y calcula meses y dinero ahorrados", () => {
+      // 10 000 Bs al 12% anual, cuota base 500 Bs, aporte extra 200 Bs
+      const res = simulateLoanSchedule(1_000_000, 12, 50_000, 20_000);
+      expect(res.base.neverPaid).toBe(false);
+      expect(res.withExtra.neverPaid).toBe(false);
+      expect(res.monthsSaved).toBeGreaterThan(0);
+      expect(res.interestSaved).toBeGreaterThan(0);
+      expect(res.schedule.length).toBeGreaterThan(2);
+
+      // El punto inicial debe ser el saldo adeudado
+      expect(res.schedule[0].baseBalance).toBe(1_000_000);
+      expect(res.schedule[0].extraBalance).toBe(1_000_000);
+
+      // La curva con aporte extra debe llegar a 0 antes que la base
+      const lastPoint = res.schedule[res.schedule.length - 1];
+      expect(lastPoint.baseBalance).toBe(0);
+    });
+
+    it("maneja caso donde la cuota es insuficiente para cubrir intereses", () => {
+      const res = simulateLoanSchedule(1_000_000, 24, 10_000, 0);
+      expect(res.base.neverPaid).toBe(true);
+      expect(res.schedule).toHaveLength(0);
+    });
   });
 });

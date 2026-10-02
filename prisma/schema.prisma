@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String         @id @default(cuid())
+  email        String         @unique
   name         String
   passwordHash String
-  createdAt    DateTime @default(now())
-  budgets      Budget[]
+  createdAt    DateTime       @default(now())
+  budgets      Budget[]       @relation("BudgetOwner")
+  memberships  BudgetMember[]
 }
 
 model Budget {
@@ -21,9 +22,10 @@ model Budget {
   name     String
   currency String          @default("BOB")
   ownerId  String
-  owner    User            @relation(fields: [ownerId], references: [id])
+  owner    User            @relation("BudgetOwner", fields: [ownerId], references: [id])
   accounts Account[]
   groups   CategoryGroup[]
+  members  BudgetMember[]
 
   @@index([ownerId])
 }
@@ -102,3 +104,19 @@ model Goal {
   targetDate  DateTime?
   category    Category  @relation(fields: [categoryId], references: [id])
 }
+
+model BudgetMember {
+  id        String   @id @default(cuid())
+  budgetId  String
+  userId    String
+  role      String   @default("member") // owner | member
+  createdAt DateTime @default(now())
+
+  budget    Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([budgetId, userId])
+  @@index([budgetId])
+  @@index([userId])
+}
+

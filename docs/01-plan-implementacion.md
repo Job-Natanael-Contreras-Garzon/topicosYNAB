@@ -82,16 +82,24 @@ Marca cada tarea cuando cumpla su criterio; así este documento sirve como table
 - [x] Detección de duplicados e ingreso con `approved = false`
 
 ### Sprint 6. Deuda y presentación
+<<<<<<< Updated upstream
 - [ ] `simulateLoan` con pruebas (préstamo sin extra, con extra, cuota menor a los intereses)
 - [ ] Pantalla de prestamos con dos líneas de saldo y tarjetas de ahorro
 - [ ] Landing, funcionalidades, metodo y precios con textos propios
 - [ ] Revision de estados vacíos, mensajes de error y vista en celular
 - [ ] Guion de demostración ensayado con los datos de la semilla
+=======
+- [x] `simulateLoan` con pruebas (préstamo sin extra, con extra, cuota menor a los intereses)
+- [x] Pantalla de préstamos con dos líneas de saldo y tarjetas de ahorro
+- [x] Landing, funcionalidades, método y precios con textos propios
+- [x] Revisión de estados vacíos, mensajes de error y vista en celular
+- [x] Guion de demostración ensayado con los datos de la semilla
+>>>>>>> Stashed changes
 
 ### Sprint 7 (opcional). Compartir
-- [ ] Tabla `BudgetMember` y migración
-- [ ] Cambiar las consultas de "dueño" a "miembro"
-- [ ] Pantalla de miembros con invitación por email y límite de seis
+- [x] Tabla `BudgetMember` y migración
+- [x] Cambiar las consultas de "dueño" a "miembro"
+- [x] Pantalla de miembros con invitación por email y límite de seis
 
 ---
 
@@ -99,13 +107,13 @@ Marca cada tarea cuando cumpla su criterio; así este documento sirve como table
 
 El proyecto se considera terminado cuando se cumplen en su totalidad estas condiciones:
 
-- [ ] Los casos de uso CU1 a CU9 pasan en el orden del documento de módulos con los datos de la semilla.
-- [ ] Las pruebas de `budget.test.ts` y `loan.test.ts` pasan satisfactoriamente, incluida la prueba de consistencia.
-- [ ] `npm run build` termina sin errores ni advertencias de tipos en TypeScript.
-- [ ] Un usuario nuevo puede registrarse, crear su primera cuenta y asignar dinero sin instrucciones previas.
-- [ ] No existen pantallas vacías sin mensaje ni botones que no ejecuten ninguna acción.
-- [ ] La interfaz responde y se ve bien tanto en un ancho móvil de 375 px como en escritorio a 1280 px.
-- [ ] El `README.md` del repositorio explica con claridad cómo instalar, migrar, sembrar y ejecutar en local.
+- [x] Los casos de uso CU1 a CU9 pasan en el orden del documento de módulos con los datos de la semilla.
+- [x] Las pruebas de `budget.test.ts` y `loan.test.ts` pasan satisfactoriamente, incluida la prueba de consistencia.
+- [x] `npm run build` termina sin errores ni advertencias de tipos en TypeScript.
+- [x] Un usuario nuevo puede registrarse, crear su primera cuenta y asignar dinero sin instrucciones previas.
+- [x] No existen pantallas vacías sin mensaje ni botones que no ejecuten ninguna acción.
+- [x] La interfaz responde y se ve bien tanto en un ancho móvil de 375 px como en escritorio a 1280 px.
+- [x] El `README.md` del repositorio explica con claridad cómo instalar, migrar, sembrar y ejecutar en local.
 
 ---
 
